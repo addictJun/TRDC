@@ -66,7 +66,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -85,10 +85,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="TRDC.qrc" />
+    <QtUic Include="C:\Users\addict\Desktop\RYCOM-main (2)\RYCOM-main\RYCOM-main\sources\mainwindow.ui" />
+    <QtUic Include="mainwindow.ui" />
     <QtUic Include="TRDC.ui" />
     <QtMoc Include="inc\TRDC.h" />
+    <ClCompile Include="src\mycombobox.cpp" />
     <ClCompile Include="src\TRDC.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="inc\mycombobox.h" />
+    <ClInclude Include="x64\Debug\uic\ui_mainwindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
