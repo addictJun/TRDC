@@ -224,21 +224,10 @@ void TRDC::on_pushButtonSend_clicked() {
     QString SendTemp;
     //读取发送窗口数据
     SendTemp = ui.TextSend->toPlainText();
-    //判断发送格式，并格式化数据
-    if (ui.checkBoxSendHex->checkState() != false)//16进制发送
-    {
-        SendTemp.append("0D0A");// 后面添加换行
-        ComSendData = QByteArray::fromHex(SendTemp.toUtf8()).data();//获取字符串
-        qDebug() << "name:16 进制send_data";
-        qDebug() << "canshu:" << ComSendData << endl;
-    }
-    else //字符串形式发送
-    {
-        SendTemp.append("\r\n");// 后面添加换行
-        ComSendData = SendTemp.toLocal8Bit().data();//获取字符串
-        qDebug() << "name:send_data";
-        qDebug() << "canshu:" << ComSendData << endl;
-    }
+    SendTemp.append("\r\n");// 后面添加换行
+    ComSendData = SendTemp.toLocal8Bit().data();//获取字符串
+    qDebug() << "name:send_data";
+    qDebug() << "canshu:" << ComSendData << endl;
 }
 
 void TRDC::on_pushButtonClearRev_clicked() {
