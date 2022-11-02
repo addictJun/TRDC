@@ -1,4 +1,6 @@
 #include "myserialport.h"
+#include <iostream>
+
 
 mySerialPort::mySerialPort(QObject *parent) : QObject(parent)
 {
@@ -6,7 +8,7 @@ mySerialPort::mySerialPort(QObject *parent) : QObject(parent)
      //QString strsend = "sh /home/root/new_ISR/tesh.sh &";
      QString strsend = "ls";
      mySetBaud("115200");
-     mySetCom("COM6");
+     mySerialPort::mySetCom("COM6");
      myOpenCom();
      mySetDataType(false);
      myComSend(strsend);
@@ -104,10 +106,10 @@ void mySerialPort::myOpenCom(){
    // MyCom.setFlowControl(QSerialPort::NoFlowControl);
     bool openFlag;
     if((openFlag = MyCom.open(QIODevice::ReadWrite)) == false){
-        qDebug()<<"串口打开失败，该端口可能被占用或不存在！\r\n";
+        std::cout << "串口打开失败，该端口可能被占用或不存在！\r\n";
     }
     else{
-        qDebug()<<"串口打开成功！\r\n";
+        std::cout << "串口打开成功！\r\n";
     }
 }
 
@@ -205,7 +207,7 @@ void mySerialPort::portDataReady(){
  * 若串口操作出现错误，则捕捉错误信号，并绑定此错误处理函数
  * ****************************************/
 void mySerialPort::errorHandle(QSerialPort::SerialPortError){
-    qDebug()<<MyCom.error();
+    std::cout << MyCom.error();
 }
 
 
