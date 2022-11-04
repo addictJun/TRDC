@@ -25,12 +25,14 @@ public:
     ~TRDC();
 
 public:
-    void SetComboBoxNo(const QStringList &list); //更新数据
-
+    void SetComboBoxNo(const QStringList &list); //设置串口
+    void SetCloseSerial();  //修改为关闭串口
+    void SetOpenSerial();  //修改为打开串口
+    void SetStopRev();  //设置停止显示
+    void SetStartRev();  //设置继续显示
 
 private slots:
     void ScanActivePort(TRData::Ptr data); //扫描串口
-    void sPeriodicallySendData();  //周期发送数据
     void sTimeUpdate(); //时间更新
     void on_pushButtonOpen_clicked(); //打开串口
     void on_checkBoxPeriodicSend_stateChanged(int arg1); //周期发送
