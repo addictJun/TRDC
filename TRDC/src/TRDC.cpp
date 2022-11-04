@@ -1,70 +1,80 @@
-#include "TRDC.h"
+ï»¿#include "TRDC.h"
 
 #ifdef Q_OS_WIN
-#pragma execution_character_set("utf-8")   //½â¾ö VS±àÒëÆ÷ÏÂÖĞÎÄÂÒÂë
+#pragma execution_character_set("utf-8")   //è§£å†³ VSç¼–è¯‘å™¨ä¸‹ä¸­æ–‡ä¹±ç 
 #endif
 
 TRDC::TRDC(QWidget *parent)
     : QMainWindow(parent)
 {
-    //1.°ó¶¨UI½çÃæ
+    //1.ç»‘å®šUIç•Œé¢
     ui.setupUi(this);
 
-    //2.³õÊ¼»¯
-    this->SignalSlotInit();
-    this->Init();
+    //2.åˆå§‹åŒ–
+    this->Init();  //é¡µé¢åˆå§‹åŒ–
+    this->SignalSlotInit();  //ä¿¡å·æ§½æœºåˆ¶åˆå§‹åŒ–
+    
 }
 
 TRDC::~TRDC()
 {}
 
+void TRDC::SetComboBoxNo(const QStringList &list) {
+    // å…ˆæ¸…ç©ºåˆ—è¡¨é¡¹ï¼Œé˜²æ­¢å¤šæ¬¡åˆ·æ–°åé‡å 
+    comboBoxNo->clear();
+    comboBoxNo->addItems(list);
+    comboBoxNo->showPopup();
+}
+
 void TRDC::SignalSlotInit() {
-    
+    //è¿æ¥é‡å®šä¹‰çš„æ¨¡å—
+    connect(comboBoxNo, SIGNAL(signal(TRData::Ptr)), \
+        this, SLOT(ScanActivePort(TRData::Ptr)));
 }
 
 /***********************************************************
-*³õÊ¼»¯Ò³ÃæÉèÖÃ
+*åˆå§‹åŒ–é¡µé¢è®¾ç½®
 ***********************************************************/
 void TRDC::Init() {
-    this->RefreshDPI();  //¸ù¾İdpiµ÷Õû´°¿Ú´óĞ¡
-    this->TimeInit();  //ÖÜÆÚ·¢ËÍ
-    this->AddStatusBar();  //ÏÂ±ê×´Ì¬À¸
-    this->AddScanPort(); //Ìí¼Ó´®¿Ú°´Å¥
-    this->ButtonState(false);   // Òş²Ø·¢ËÍ°´Å¥ºÍ½ÓÊÕ
-    this->ShowTime();  //ÑÓ³ÙÏÔÊ¾Ê±¼ä
+    this->RefreshDPI();  //æ ¹æ®dpiè°ƒæ•´çª—å£å¤§å°
+    this->TimeInit();  //å‘¨æœŸå‘é€
+    this->AddStatusBar();  //ä¸‹æ ‡çŠ¶æ€æ 
+    this->AddScanPort(); //æ·»åŠ ä¸²å£æŒ‰é’®
+    this->ButtonState(false);   // éšè—å‘é€æŒ‰é’®å’Œæ¥æ”¶
+    this->ShowTime();  //å»¶è¿Ÿæ˜¾ç¤ºæ—¶é—´
 }
 
 /***********************************************************
-*Ë¢ĞÂdpi£¬»ñÈ¡µ±Ç°ÆÁÄ»×´Ì¬£¬²¢ÉìËõËùÓÃ¿Ø¼şµÄ´óĞ¡
-*Ö»ÔÚ´°¿Ú¹¹Ôìº¯ÊıÖĞµ÷ÓÃ£¬Òò´Ë£¬¸Ä±äÆÁÄ»·Ö±æÂÊĞèÒªÖØĞÂÆô¶¯Èí¼ş
+*åˆ·æ–°dpiï¼Œè·å–å½“å‰å±å¹•çŠ¶æ€ï¼Œå¹¶ä¼¸ç¼©æ‰€ç”¨æ§ä»¶çš„å¤§å°
+*åªåœ¨çª—å£æ„é€ å‡½æ•°ä¸­è°ƒç”¨ï¼Œå› æ­¤ï¼Œæ”¹å˜å±å¹•åˆ†è¾¨ç‡éœ€è¦é‡æ–°å¯åŠ¨è½¯ä»¶
 ***********************************************************/
 void TRDC::RefreshDPI()
 {
-    //¼ÆËãdpi
+    //è®¡ç®—dpi
     QList<QScreen*> screens = QApplication::screens();
     QScreen* screen = screens[0];
     qreal dpi = screen->logicalDotsPerInch();
 
-    //¼ÆËãdpi¶ÔÓ¦µÄËõ·Å±ÈÀı
+    //è®¡ç®—dpiå¯¹åº”çš„ç¼©æ”¾æ¯”ä¾‹
     double object_rate = dpi / 96.0;
     ChangeObjectSize(*this, object_rate);
     resize(width() * object_rate, height() * object_rate);
 
-    ui.groupBoxRev->setFixedWidth(541 * object_rate);//¸ù¾İÆÁÄ»·Ö±æÂÊ²»Ò»Ñù¹Ì¶¨½ÓÊÕ×éµÄ´óĞ¡
-    ui.TextRev->setFixedWidth(521 * object_rate);//¸ù¾İÆÁÄ»·Ö±æÂÊ²»Ò»Ñù¹Ì¶¨½ÓÊÕ´°¿ÚµÄ´óĞ¡
-    this->setFixedSize(729 * object_rate, 587 * object_rate);//¸ù¾İÆÁÄ»·Ö±æÂÊ²»Ò»Ñù¹Ì¶¨Ö÷´°¿ÚµÄ´óĞ¡
+    ui.groupBoxRev->setFixedWidth(541 * object_rate);//æ ¹æ®å±å¹•åˆ†è¾¨ç‡ä¸ä¸€æ ·å›ºå®šæ¥æ”¶ç»„çš„å¤§å°
+    ui.TextRev->setFixedWidth(521 * object_rate);//æ ¹æ®å±å¹•åˆ†è¾¨ç‡ä¸ä¸€æ ·å›ºå®šæ¥æ”¶çª—å£çš„å¤§å°
+    this->setFixedSize(729 * object_rate, 587 * object_rate);//æ ¹æ®å±å¹•åˆ†è¾¨ç‡ä¸ä¸€æ ·å›ºå®šä¸»çª—å£çš„å¤§å°
 }
 
 
 void TRDC::TimeInit() {
-    //´´½¨ÖÜÆÚ·¢ËÍ¡¢Ê±¼äÏÔÊ¾¡¢ÑÓÊ±½ÓÊÕ¶¨Ê±Æ÷£¬²¢³õÊ¼»¯
+    //åˆ›å»ºå‘¨æœŸå‘é€ã€æ—¶é—´æ˜¾ç¤ºã€å»¶æ—¶æ¥æ”¶å®šæ—¶å™¨ï¼Œå¹¶åˆå§‹åŒ–
     PriecSendTimer = new QTimer;
-    PriecSendTimer->setInterval(1000);//Ä¬ÈÏÖÜÆÚ1000ms
-    connect(PriecSendTimer, &QTimer::timeout, this, [=]() {on_pushButtonSend_clicked(); });//¶¨Ê±Æ÷²Û¹ØÁª,¹ØÁªÖÁ·¢ËÍ°´Å¥²Ûº¯Êı£¬¼´¶¨Ê±µ½À´Ê±£¬×Ô¶¯·¢ËÍÊı¾İ
+    PriecSendTimer->setInterval(1000);//é»˜è®¤å‘¨æœŸ1000ms
+    connect(PriecSendTimer, &QTimer::timeout, this, [=]() {on_pushButtonSend_clicked(); });//å®šæ—¶å™¨æ§½å…³è”,å…³è”è‡³å‘é€æŒ‰é’®æ§½å‡½æ•°ï¼Œå³å®šæ—¶åˆ°æ¥æ—¶ï¼Œè‡ªåŠ¨å‘é€æ•°æ®
 }
 
 /***********************************************************
-* ¸ù¾İÆÁÄ»Çå¿Õµ÷Õû¿Ø¼ş´óĞ¡
+* æ ¹æ®å±å¹•æ¸…ç©ºè°ƒæ•´æ§ä»¶å¤§å°
 ***********************************************************/
 void TRDC::ChangeObjectSize(const QObject& o, double object_rate)
 {
@@ -78,19 +88,19 @@ void TRDC::ChangeObjectSize(const QObject& o, double object_rate)
     }
 }
 /***********************************************************
-* °´Å¥×´Ì¬
+* æŒ‰é’®çŠ¶æ€
 ***********************************************************/
 void TRDC::ButtonState(const bool &flag)
 {
-    //·¢ËÍÇø
+    //å‘é€åŒº
     ui.pushButtonSend->setEnabled(flag);
-    //½ÓÊÕÇø
+    //æ¥æ”¶åŒº
     ui.pushButtonSaveRev->setEnabled(flag);
     ui.pushButtonStopRev->setEnabled(flag);
     ui.pushButtonClearRev->setEnabled(flag);
     ui.checkBoxReVTime->setEnabled(flag);
     ui.checkBoxRevHex->setEnabled(flag);
-    //·¢ËÍÉèÖÃ
+    //å‘é€è®¾ç½®
     comboBoxNo->setEnabled(!flag);
     ui.pushButtonRdFile->setEnabled(flag);
     ui.pushButtonClearSend->setEnabled(flag);
@@ -101,66 +111,69 @@ void TRDC::ButtonState(const bool &flag)
 
 void TRDC::ShowTime() {
 
-    QTimer* DateTimer = new QTimer(this);//×´Ì¬À¸ÏÔÊ¾Ê±¼ä£¬ÈÕÆÚ
+    QTimer* DateTimer = new QTimer(this);//çŠ¶æ€æ æ˜¾ç¤ºæ—¶é—´ï¼Œæ—¥æœŸ
     connect(DateTimer, &QTimer::timeout, this, [=]() {sTimeUpdate(); });
-    DateTimer->start(1000); //Ã¿¸ô1000ms·¢ËÍtimeoutµÄĞÅºÅ
+    DateTimer->start(1000); //æ¯éš”1000mså‘é€timeoutçš„ä¿¡å·
 }
 
 void TRDC::sTimeUpdate()
 {
-
-    QDateTime current_time = QDateTime::currentDateTime();//»ñÈ¡Ê±¼ä
-    QString timestr = current_time.toString("yyyy-MM-dd hh:mm:ss"); //ÉèÖÃÏÔÊ¾µÄ¸ñÊ½
-    currentTimeLabel->setText(timestr); //ÉèÖÃlabelµÄÎÄ±¾ÄÚÈİÎªÊ±¼ä
+    QDateTime current_time = QDateTime::currentDateTime();//è·å–æ—¶é—´
+    QString timestr = current_time.toString("yyyy-MM-dd hh:mm:ss"); //è®¾ç½®æ˜¾ç¤ºçš„æ ¼å¼
+    currentTimeLabel->setText(timestr); //è®¾ç½®labelçš„æ–‡æœ¬å†…å®¹ä¸ºæ—¶é—´
 }
 
 
 
 void TRDC::AddStatusBar() {
 
-    //´´½¨ÏÂ±ê×´Ì¬À¸
-    QStatusBar* STABar = statusBar();//»ñÈ¡×´Ì¬À¸
-    qlbSendSum = new QLabel(this);//´´½¨·¢ËÍÍ³¼Æ±êÇ©
-    qlbRevSum = new QLabel(this);//´´½¨½ÓÊÕÍ³¼Æ±êÇ©
-    currentTimeLabel = new QLabel(this); // ´´½¨Ê±¼ä£¬ÈÕÆÚÏÔÊ¾±êÇ©
-    qlbLinkSource = new QLabel(this);//Ô´ÂëÁ´½Ó±êÇ©¶ÔÏó
+    //åˆ›å»ºä¸‹æ ‡çŠ¶æ€æ 
+    QStatusBar* STABar = statusBar();//è·å–çŠ¶æ€æ 
+    qlbSendSum = new QLabel(this);//åˆ›å»ºå‘é€ç»Ÿè®¡æ ‡ç­¾
+    qlbRevSum = new QLabel(this);//åˆ›å»ºæ¥æ”¶ç»Ÿè®¡æ ‡ç­¾
+    currentTimeLabel = new QLabel(this); // åˆ›å»ºæ—¶é—´ï¼Œæ—¥æœŸæ˜¾ç¤ºæ ‡ç­¾
+    qlbLinkSource = new QLabel(this);//æºç é“¾æ¥æ ‡ç­¾å¯¹è±¡
 
-    //´´½¨±êÇ©´óĞ¡
+    //åˆ›å»ºæ ‡ç­¾å¤§å°
     qlbLinkSource->setMinimumSize(90, 20);
     qlbSendSum->setMinimumSize(100, 20);
     qlbRevSum->setMinimumSize(100, 20);
     currentTimeLabel->setMinimumSize(100, 20);
 
-    //¸³Öµ
+    //èµ‹å€¼
     ComSendSum = 0;
     ComRevSum = 0;
     SetNumOnLabel(qlbSendSum, "Tx: ", ComSendSum);
     SetNumOnLabel(qlbRevSum, "Rx: ", ComRevSum);
-    STABar->addPermanentWidget(qlbSendSum);//·¢ËÍ
-    STABar->addPermanentWidget(qlbRevSum);//½ÓÊÕ
-    STABar->addPermanentWidget(currentTimeLabel);//Ê±¼ä
-    STABar->addWidget(qlbLinkSource);// github¹ÙÍø
+    STABar->addPermanentWidget(qlbSendSum);//å‘é€
+    STABar->addPermanentWidget(qlbRevSum);//æ¥æ”¶
+    STABar->addPermanentWidget(currentTimeLabel);//æ—¶é—´
+    STABar->addWidget(qlbLinkSource);// githubå®˜ç½‘
     qlbLinkSource->setOpenExternalLinks(true);
-    qlbLinkSource->setText("<style> a {text-decoration: none} </style> <a href=\"https://github.com/addictJun/TRDC\">--ÖúÊÖÔ´´úÂë--");// ÎŞÏÂ»®Ïß
+    qlbLinkSource->setText("<style> a {text-decoration: none} </style> <a href=\"https://github.com/addictJun/TRDC\">--åŠ©æ‰‹æºä»£ç --");// æ— ä¸‹åˆ’çº¿
 }
 
 void TRDC::AddScanPort() {
     comboBoxNo = new myComboBox(ui.groupBoxComSet);
     comboBoxNo->setObjectName(QStringLiteral("comboBoxNo"));
-    comboBoxNo->setGeometry(QRect(10, 20, 51, 19));
+    comboBoxNo->setGeometry(QRect(10, 21, 144, 22));
 }
 
 void TRDC::sPeriodicallySendData() {
 
 }
 
+void TRDC::ScanActivePort(const TRData::Ptr data) {
+    emit signal(data);
+} //æ‰«æä¸²å£
+
 /***********************************************************
- * ×´Ì¬À¸±êÇ©ÏÔÊ¾¼ÆÊıÖµ
- * 1.ÉèÖÃ±êÇ©ÏÔÊ¾ÄÚÈİ
+ * çŠ¶æ€æ æ ‡ç­¾æ˜¾ç¤ºè®¡æ•°å€¼
+ * 1.è®¾ç½®æ ‡ç­¾æ˜¾ç¤ºå†…å®¹
  ***********************************************************/
 void TRDC::SetNumOnLabel(QLabel* lbl, QString strS, long num)
 {
-    // ±êÇ©ÏÔÊ¾
+    // æ ‡ç­¾æ˜¾ç¤º
     QString strN;
     strN.sprintf("%ld", num);
     QString str = strS + strN;
@@ -168,50 +181,46 @@ void TRDC::SetNumOnLabel(QLabel* lbl, QString strS, long num)
 }
 
 /***********************************************************
- * ´ò¿ª´®¿Ú
+ * æ‰“å¼€ä¸²å£
  ***********************************************************/
 void TRDC::on_pushButtonOpen_clicked() {
 
-    if (ui.pushButtonOpen->text() == "´ò¿ª´®¿Ú") {
-        if (ConnectSerial()) {
-            OpenSerial();
-        }
-        else {
-            qDebug() << "connect is fail";
-        }   
+    if (ui.pushButtonOpen->text() == "æ‰“å¼€ä¸²å£") {
+        OpenSerial();  
     }
     else {
-        CloseSerial(); //¹Ø±Õ´®¿Ú
+        CloseSerial(); //å…³é—­ä¸²å£
     }
 }
 
 void TRDC::on_checkBoxPeriodicSend_stateChanged(int arg1) {
-    if (arg1 == false)//Î´Ñ¡ÖĞ
+    if (arg1 == false)//æœªé€‰ä¸­
     {
-        PriecSendTimer->stop();//¹Ø±Õ¶¨Ê±Æ÷
-        qDebug() << "Î´ÖÜÆÚ·¢ËÍ" <<endl;
+        PriecSendTimer->stop();//å…³é—­å®šæ—¶å™¨
+        qDebug() << "æœªå‘¨æœŸå‘é€" <<endl;
     }
     else
     {
-        PriecSendTimer->start(ui.lineEditTime->text().toInt());//Æô¶¯ÖÜÆÚ·¢ËÍ¶¨Ê±Æ÷
-        qDebug() << "ÒÑÉèÖÃÖÜÆÚ·¢ËÍ" << endl;
+        PriecSendTimer->start(ui.lineEditTime->text().toInt());//å¯åŠ¨å‘¨æœŸå‘é€å®šæ—¶å™¨
+        qDebug() << "å·²è®¾ç½®å‘¨æœŸå‘é€" << endl;
     }
 }
 
 void TRDC::OpenSerial() {
-    ui.pushButtonOpen->setText("¹Ø±Õ´®¿Ú");
-    ButtonState(true); //¹Ø±Õ´®¿Ú
+    //å‘å°„ä¿¡å·
+    TRData::Ptr p_data(new TRData(S_OPEN_SERIAL));
+    p_data->SetArgument(BAUD, ui.comboBoxComBaud->currentText());
+    p_data->SetArgument(COM, comboBoxNo->currentText());
+    emit signal(p_data);
 }
 
 void TRDC::CloseSerial() {
-    ui.pushButtonOpen->setText("´ò¿ª´®¿Ú");
-    ButtonState(false); //¹Ø±Õ´®¿Ú
-}
+    ui.pushButtonOpen->setText("æ‰“å¼€ä¸²å£");
+    ButtonState(false); //å…³é—­ä¸²å£
 
-bool TRDC::ConnectSerial() {
-    qDebug() << "name:open serial";
-    qDebug() << "canshu:" << endl;
-    return true;
+    //å‘å°„ä¿¡å·
+    TRData::Ptr p_data(new TRData(S_CLOSE_SERIAL));
+    emit signal(p_data);
 }
 
 void TRDC::on_checkBoxReVTime_stateChanged(int arg1) {
@@ -222,10 +231,10 @@ void TRDC::on_pushButtonSend_clicked() {
 
     QByteArray ComSendData;
     QString SendTemp;
-    //¶ÁÈ¡·¢ËÍ´°¿ÚÊı¾İ
+    //è¯»å–å‘é€çª—å£æ•°æ®
     SendTemp = ui.TextSend->toPlainText();
-    SendTemp.append("\r\n");// ºóÃæÌí¼Ó»»ĞĞ
-    ComSendData = SendTemp.toLocal8Bit().data();//»ñÈ¡×Ö·û´®
+    SendTemp.append("\r\n");// åé¢æ·»åŠ æ¢è¡Œ
+    ComSendData = SendTemp.toLocal8Bit().data();//è·å–å­—ç¬¦ä¸²
     qDebug() << "name:send_data";
     qDebug() << "canshu:" << ComSendData << endl;
 }
@@ -247,20 +256,20 @@ void TRDC::on_pushButtonClearSend_clicked() {
 }
 
 void TRDC::on_pushButtonStopRev_clicked() {
-    if (ui.pushButtonStopRev->text() == "Í£Ö¹ÏÔÊ¾")
+    if (ui.pushButtonStopRev->text() == "åœæ­¢æ˜¾ç¤º")
     {
-        ui.pushButtonStopRev->setText("¼ÌĞøÏÔÊ¾");
+        ui.pushButtonStopRev->setText("ç»§ç»­æ˜¾ç¤º");
     }
     else
     {
-        ui.pushButtonStopRev->setText("Í£Ö¹ÏÔÊ¾");
+        ui.pushButtonStopRev->setText("åœæ­¢æ˜¾ç¤º");
     }
 }
 
 void TRDC::on_pushButtonRdFile_clicked() {
-    QString curPath = QDir::currentPath();//»ñÈ¡ÏµÍ³µ±Ç°Ä¿Â¼
-    QString dlgTitle = "´ò¿ªÒ»¸öÎÄ¼ş"; //¶Ô»°¿ò±êÌâ
-    QString filter = "ÎÄ±¾ÎÄ¼ş(*.txt);;ËùÓĞÎÄ¼ş(*.*)"; //ÎÄ¼ş¹ıÂËÆ÷
+    QString curPath = QDir::currentPath();//è·å–ç³»ç»Ÿå½“å‰ç›®å½•
+    QString dlgTitle = "æ‰“å¼€ä¸€ä¸ªæ–‡ä»¶"; //å¯¹è¯æ¡†æ ‡é¢˜
+    QString filter = "æ–‡æœ¬æ–‡ä»¶(*.txt);;æ‰€æœ‰æ–‡ä»¶(*.*)"; //æ–‡ä»¶è¿‡æ»¤å™¨
     QString aFileName = QFileDialog::getOpenFileName(this, dlgTitle, curPath, filter);
     if (aFileName.isEmpty())
         return;
@@ -268,65 +277,65 @@ void TRDC::on_pushButtonRdFile_clicked() {
 }
 
 /***********************************************************
- *¶ÁÎÄ¼şº¯Êı
- * ¶ÁÈ¡ÎÄ¼ş£¬²¢½«ÎÄ¼şÄÚÈİÏÔÊ¾ÔÚ·¢ËÍ¿ò
+ *è¯»æ–‡ä»¶å‡½æ•°
+ * è¯»å–æ–‡ä»¶ï¼Œå¹¶å°†æ–‡ä»¶å†…å®¹æ˜¾ç¤ºåœ¨å‘é€æ¡†
  ***********************************************************/
 bool TRDC::openTextByIODevice(const QString& aFileName)
 {
-    QFile   aFile(aFileName);//ÓÃIODevice·½Ê½´ò¿ªÎÄ±¾ÎÄ¼ş
-    if (!aFile.exists()) //ÎÄ¼ş²»´æÔÚ
+    QFile   aFile(aFileName);//ç”¨IODeviceæ–¹å¼æ‰“å¼€æ–‡æœ¬æ–‡ä»¶
+    if (!aFile.exists()) //æ–‡ä»¶ä¸å­˜åœ¨
         return false;
     if (!aFile.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
     QByteArray text = aFile.readAll();
-    QString strText = byteArrayToUnicode(text);//±àÂë¸ñÊ½×ª»»£¬·ÀÖ¹GBKÖĞÎÄÂÒÂë
+    QString strText = byteArrayToUnicode(text);//ç¼–ç æ ¼å¼è½¬æ¢ï¼Œé˜²æ­¢GBKä¸­æ–‡ä¹±ç 
     ui.TextSend->setPlainText(strText);
     aFile.close();
     return  true;
 }
 /***********************************************************
-*±àÂë¸ñÊ½×ª»»
-*·ÀÖ¹GBKÖĞÎÄÂÒÂë
+*ç¼–ç æ ¼å¼è½¬æ¢
+*é˜²æ­¢GBKä¸­æ–‡ä¹±ç 
 ***********************************************************/
 QString TRDC::byteArrayToUnicode(const QByteArray& array)
 {
-    // stateÓÃÓÚ±£´æ×ª»»×´Ì¬£¬ËüµÄ³ÉÔ±invalidChars£¬¿ÉÓÃÀ´ÅĞ¶ÏÊÇ·ñ×ª»»³É¹¦
-    // Èç¹û×ª»»³É¹¦£¬ÔòÖµÎª0£¬Èç¹ûÖµ´óÓÚ0£¬ÔòËµÃ÷×ª»»Ê§°Ü
+    // stateç”¨äºä¿å­˜è½¬æ¢çŠ¶æ€ï¼Œå®ƒçš„æˆå‘˜invalidCharsï¼Œå¯ç”¨æ¥åˆ¤æ–­æ˜¯å¦è½¬æ¢æˆåŠŸ
+    // å¦‚æœè½¬æ¢æˆåŠŸï¼Œåˆ™å€¼ä¸º0ï¼Œå¦‚æœå€¼å¤§äº0ï¼Œåˆ™è¯´æ˜è½¬æ¢å¤±è´¥
     QTextCodec::ConverterState state;
-    // ÏÈ³¢ÊÔÊ¹ÓÃutf-8µÄ·½Ê½°ÑQByteArray×ª»»³ÉQString
+    // å…ˆå°è¯•ä½¿ç”¨utf-8çš„æ–¹å¼æŠŠQByteArrayè½¬æ¢æˆQString
     QString text = QTextCodec::codecForName("UTF-8")->toUnicode(array.constData(), array.size(), &state);
-    // Èç¹û×ª»»Ê±ÎŞĞ§×Ö·ûÊıÁ¿´óÓÚ0£¬ËµÃ÷±àÂë¸ñÊ½²»¶Ô
+    // å¦‚æœè½¬æ¢æ—¶æ— æ•ˆå­—ç¬¦æ•°é‡å¤§äº0ï¼Œè¯´æ˜ç¼–ç æ ¼å¼ä¸å¯¹
     if (state.invalidChars > 0)
     {
-        // ÔÙ³¢ÊÔÊ¹ÓÃGBKµÄ·½Ê½½øĞĞ×ª»»£¬Ò»°ã¾ÍÄÜ×ª»»ÕıÈ·(µ±È»Ò²¿ÉÄÜÊÇÆäËü¸ñÊ½£¬µ«±È½ÏÉÙ¼ûÁË)
+        // å†å°è¯•ä½¿ç”¨GBKçš„æ–¹å¼è¿›è¡Œè½¬æ¢ï¼Œä¸€èˆ¬å°±èƒ½è½¬æ¢æ­£ç¡®(å½“ç„¶ä¹Ÿå¯èƒ½æ˜¯å…¶å®ƒæ ¼å¼ï¼Œä½†æ¯”è¾ƒå°‘è§äº†)
         text = QTextCodec::codecForName("GBK")->toUnicode(array);
     }
     return text;
 }
 
 void TRDC::on_pushButtonSaveRev_clicked() {
-    QString curPath = QDir::currentPath();//»ñÈ¡ÏµÍ³µ±Ç°Ä¿Â¼
-    QString dlgTitle = "Áí´æÎªÒ»¸öÎÄ¼ş"; //¶Ô»°¿ò±êÌâ
-    QString filter = "ÎÄ±¾ÎÄ¼ş(*.txt);;ËùÓĞÎÄ¼ş(*.*);;hÎÄ¼ş(*.h);;c++ÎÄ¼ş(*.cpp)"; //ÎÄ¼ş¹ıÂËÆ÷
+    QString curPath = QDir::currentPath();//è·å–ç³»ç»Ÿå½“å‰ç›®å½•
+    QString dlgTitle = "å¦å­˜ä¸ºä¸€ä¸ªæ–‡ä»¶"; //å¯¹è¯æ¡†æ ‡é¢˜
+    QString filter = "æ–‡æœ¬æ–‡ä»¶(*.txt);;æ‰€æœ‰æ–‡ä»¶(*.*);;hæ–‡ä»¶(*.h);;c++æ–‡ä»¶(*.cpp)"; //æ–‡ä»¶è¿‡æ»¤å™¨
     QString aFileName = QFileDialog::getSaveFileName(this, dlgTitle, curPath, filter);
     if (aFileName.isEmpty())
         return;
     saveTextByIODevice(aFileName);
 }
 /***********************************************************
-*Ğ´ÎÄ¼şº¯Êı
-*Ö´ĞĞÎÄ¼ş±£´æ¹¤×÷
+*å†™æ–‡ä»¶å‡½æ•°
+*æ‰§è¡Œæ–‡ä»¶ä¿å­˜å·¥ä½œ
 ***********************************************************/
 bool TRDC::saveTextByIODevice(const QString& aFileName)
-{ //ÓÃIODevice·½Ê½±£´æÎÄ±¾ÎÄ¼ş
+{ //ç”¨IODeviceæ–¹å¼ä¿å­˜æ–‡æœ¬æ–‡ä»¶
     QFile aFile(aFileName);
     //aFile.setFileName(aFileName);
     if (!aFile.open(QIODevice::WriteOnly | QIODevice::Text))
         return false;
-    QString str = ui.TextRev->toPlainText();//Õû¸öÄÚÈİ×÷Îª×Ö·û´®
-    QByteArray  strBytes = str.toUtf8();//×ª»»Îª×Ö½ÚÊı×é
+    QString str = ui.TextRev->toPlainText();//æ•´ä¸ªå†…å®¹ä½œä¸ºå­—ç¬¦ä¸²
+    QByteArray  strBytes = str.toUtf8();//è½¬æ¢ä¸ºå­—èŠ‚æ•°ç»„
 
-    aFile.write(strBytes, strBytes.length());  //Ğ´ÈëÎÄ¼ş
+    aFile.write(strBytes, strBytes.length());  //å†™å…¥æ–‡ä»¶
     aFile.close();
     return true;
 }

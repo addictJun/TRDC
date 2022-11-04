@@ -30,7 +30,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.9.9_msvc2017_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;widgets;serialport</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
@@ -85,16 +85,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="TRDC.qrc" />
-    <QtUic Include="C:\Users\addict\Desktop\RYCOM-main (2)\RYCOM-main\RYCOM-main\sources\mainwindow.ui" />
     <QtUic Include="mainwindow.ui" />
     <QtUic Include="TRDC.ui" />
     <QtMoc Include="inc\TRDC.h" />
+    <ClCompile Include="src\core.cpp" />
     <ClCompile Include="src\mycombobox.cpp" />
+    <ClCompile Include="src\myserialport.cpp" />
+    <ClCompile Include="src\trdata.cpp" />
     <ClCompile Include="src\TRDC.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="inc\mycombobox.h" />
+    <QtMoc Include="inc\myserialport.h" />
+    <QtMoc Include="inc\core.h" />
+    <ClInclude Include="inc\global.h" />
+    <ClInclude Include="inc\trdata.h" />
     <ClInclude Include="x64\Debug\uic\ui_mainwindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

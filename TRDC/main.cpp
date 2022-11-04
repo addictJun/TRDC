@@ -1,10 +1,10 @@
-#include "TRDC.h"
+﻿#include "core.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
 {
+    system("chcp 65001");
     QApplication a(argc, argv);
-    TRDC w;
-    w.show();
+    Core core;
     return a.exec();
 }

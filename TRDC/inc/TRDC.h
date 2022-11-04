@@ -13,6 +13,8 @@
 #include <Qdebug>
 #include "ui_mainwindow.h"
 #include "mycombobox.h"
+#include "global.h"
+#include "trdata.h"
 
 class TRDC : public QMainWindow
 {
@@ -22,7 +24,12 @@ public:
     explicit TRDC(QWidget *parent = nullptr);
     ~TRDC();
 
+public:
+    void SetComboBoxNo(const QStringList &list); //更新数据
+
+
 private slots:
+    void ScanActivePort(TRData::Ptr data); //扫描串口
     void sPeriodicallySendData();  //周期发送数据
     void sTimeUpdate(); //时间更新
     void on_pushButtonOpen_clicked(); //打开串口
@@ -48,10 +55,13 @@ private:
     void SetNumOnLabel(QLabel* lbl, QString strS, long num); //设置label值
     void OpenSerial(); //打开串口
     void CloseSerial(); //关闭串口
-    bool ConnectSerial(); //连接串口
     bool openTextByIODevice(const QString& aFileName); //读取文件
     QString byteArrayToUnicode(const QByteArray& array); //编码转换
     bool saveTextByIODevice(const QString& aFileName); //保存设备文件
+
+signals:
+    void signal(const TRData::Ptr data);
+
 
 private:
     Ui::MainWindow ui;
@@ -62,8 +72,5 @@ private:
     QLabel* currentTimeLabel; //系统时间显示标签
     QLabel* qlbLinkSource;//源码链接标签对象
     long ComSendSum, ComRevSum;//发送和接收流量统计变量
-
     QTimer* PriecSendTimer=NULL;//周期发送定时器，和多行的循环发送共用
-
-
 };

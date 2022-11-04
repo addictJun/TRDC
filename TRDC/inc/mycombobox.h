@@ -4,6 +4,8 @@
 #include <QComboBox>
 #include <QMouseEvent>
 #include <Qdebug>
+#include"global.h"
+#include"trdata.h"
 
 class myComboBox : public QComboBox
 {
@@ -15,6 +17,7 @@ public:
     void mousePressEvent(QMouseEvent *event);
 
 signals:
+    void signal(TRData::Ptr data);
 
 private:
     void scanActivePort();

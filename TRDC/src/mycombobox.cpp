@@ -1,16 +1,14 @@
 #include "mycombobox.h"
 
-myComboBox::myComboBox(QWidget *parent) : QComboBox(parent)
-{
+myComboBox::myComboBox(QWidget *parent) : QComboBox(parent){
     // 扫描可用串口
     scanActivePort();
 }
 
 // 扫描可用串口
-void myComboBox::scanActivePort()
-{
-    qDebug() << "name:scanActivePort";
-    qDebug() << "canshu:" << endl;
+void myComboBox::scanActivePort(){
+    TRData::Ptr p_data(new TRData(S_SCAN_SERIAL));
+    emit signal(p_data);
 }
 
 // 重写鼠标点击事件
@@ -20,7 +18,5 @@ void myComboBox::mousePressEvent(QMouseEvent *event)
     {
         // 扫描可用串口
         scanActivePort();
-        // 弹出下拉框
-        showPopup();
     }
 }

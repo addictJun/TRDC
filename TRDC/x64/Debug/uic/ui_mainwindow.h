@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -37,6 +38,7 @@ public:
     QCheckBox *checkBoxPeriodicSend;
     QGroupBox *groupBoxComSet;
     QPushButton *pushButtonOpen;
+    QComboBox *comboBoxComBaud;
     QGroupBox *groupBoxSendSet;
     QPushButton *pushButtonClearSend;
     QPushButton *pushButtonRdFile;
@@ -84,43 +86,46 @@ public:
         checkBoxPeriodicSend->setCheckable(true);
         groupBoxComSet = new QGroupBox(centralWidget);
         groupBoxComSet->setObjectName(QStringLiteral("groupBoxComSet"));
-        groupBoxComSet->setGeometry(QRect(10, 0, 161, 51));
+        groupBoxComSet->setGeometry(QRect(0, 0, 171, 81));
         pushButtonOpen = new QPushButton(groupBoxComSet);
         pushButtonOpen->setObjectName(QStringLiteral("pushButtonOpen"));
-        pushButtonOpen->setGeometry(QRect(80, 20, 71, 23));
+        pushButtonOpen->setGeometry(QRect(90, 50, 69, 22));
+        comboBoxComBaud = new QComboBox(groupBoxComSet);
+        comboBoxComBaud->setObjectName(QStringLiteral("comboBoxComBaud"));
+        comboBoxComBaud->setGeometry(QRect(10, 50, 69, 22));
         groupBoxSendSet = new QGroupBox(centralWidget);
         groupBoxSendSet->setObjectName(QStringLiteral("groupBoxSendSet"));
-        groupBoxSendSet->setGeometry(QRect(10, 190, 161, 111));
+        groupBoxSendSet->setGeometry(QRect(10, 170, 161, 91));
         pushButtonClearSend = new QPushButton(groupBoxSendSet);
         pushButtonClearSend->setObjectName(QStringLiteral("pushButtonClearSend"));
-        pushButtonClearSend->setGeometry(QRect(60, 50, 95, 23));
+        pushButtonClearSend->setGeometry(QRect(84, 50, 71, 23));
         pushButtonRdFile = new QPushButton(groupBoxSendSet);
         pushButtonRdFile->setObjectName(QStringLiteral("pushButtonRdFile"));
-        pushButtonRdFile->setGeometry(QRect(60, 30, 95, 23));
+        pushButtonRdFile->setGeometry(QRect(84, 30, 71, 23));
         checkBoxSendHex = new QCheckBox(groupBoxSendSet);
         checkBoxSendHex->setObjectName(QStringLiteral("checkBoxSendHex"));
-        checkBoxSendHex->setGeometry(QRect(60, 80, 101, 16));
+        checkBoxSendHex->setGeometry(QRect(10, 40, 101, 16));
         groupBoxRevSet = new QGroupBox(centralWidget);
         groupBoxRevSet->setObjectName(QStringLiteral("groupBoxRevSet"));
-        groupBoxRevSet->setGeometry(QRect(10, 50, 161, 131));
+        groupBoxRevSet->setGeometry(QRect(10, 80, 161, 91));
         checkBoxRevHex = new QCheckBox(groupBoxRevSet);
         checkBoxRevHex->setObjectName(QStringLiteral("checkBoxRevHex"));
-        checkBoxRevHex->setGeometry(QRect(60, 110, 101, 16));
+        checkBoxRevHex->setGeometry(QRect(10, 60, 101, 16));
         checkBoxRevHex->setCheckable(true);
         checkBoxRevHex->setChecked(false);
         checkBoxRevHex->setTristate(false);
         checkBoxReVTime = new QCheckBox(groupBoxRevSet);
         checkBoxReVTime->setObjectName(QStringLiteral("checkBoxReVTime"));
-        checkBoxReVTime->setGeometry(QRect(60, 90, 95, 16));
+        checkBoxReVTime->setGeometry(QRect(10, 30, 95, 16));
         pushButtonClearRev = new QPushButton(groupBoxRevSet);
         pushButtonClearRev->setObjectName(QStringLiteral("pushButtonClearRev"));
-        pushButtonClearRev->setGeometry(QRect(60, 60, 95, 23));
+        pushButtonClearRev->setGeometry(QRect(84, 60, 71, 23));
         pushButtonStopRev = new QPushButton(groupBoxRevSet);
         pushButtonStopRev->setObjectName(QStringLiteral("pushButtonStopRev"));
-        pushButtonStopRev->setGeometry(QRect(60, 40, 95, 23));
+        pushButtonStopRev->setGeometry(QRect(84, 40, 71, 23));
         pushButtonSaveRev = new QPushButton(groupBoxRevSet);
         pushButtonSaveRev->setObjectName(QStringLiteral("pushButtonSaveRev"));
-        pushButtonSaveRev->setGeometry(QRect(60, 20, 95, 23));
+        pushButtonSaveRev->setGeometry(QRect(84, 20, 71, 23));
         groupBoxSend = new QGroupBox(centralWidget);
         groupBoxSend->setObjectName(QStringLiteral("groupBoxSend"));
         groupBoxSend->setGeometry(QRect(180, 390, 541, 141));
@@ -143,7 +148,7 @@ public:
         TextRev->setReadOnly(true);
         groupBoxMutiSend = new QGroupBox(centralWidget);
         groupBoxMutiSend->setObjectName(QStringLiteral("groupBoxMutiSend"));
-        groupBoxMutiSend->setGeometry(QRect(10, 310, 161, 221));
+        groupBoxMutiSend->setGeometry(QRect(10, 270, 161, 261));
         MainWindow->setCentralWidget(centralWidget);
         labelMS->raise();
         checkBoxPeriodicSend->raise();
@@ -183,6 +188,10 @@ public:
         checkBoxPeriodicSend->setText(QApplication::translate("MainWindow", "\345\221\250\346\234\237\345\217\221\351\200\201", Q_NULLPTR));
         groupBoxComSet->setTitle(QApplication::translate("MainWindow", "\344\270\262\345\217\243\350\256\276\347\275\256", Q_NULLPTR));
         pushButtonOpen->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200\344\270\262\345\217\243", Q_NULLPTR));
+        comboBoxComBaud->clear();
+        comboBoxComBaud->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "115200", Q_NULLPTR)
+        );
         groupBoxSendSet->setTitle(QApplication::translate("MainWindow", "\345\217\221\351\200\201\350\256\276\347\275\256", Q_NULLPTR));
         pushButtonClearSend->setText(QApplication::translate("MainWindow", "\346\270\205\347\251\272\345\217\221\351\200\201\345\214\272", Q_NULLPTR));
         pushButtonRdFile->setText(QApplication::translate("MainWindow", "\350\257\273\345\217\226\346\226\207\344\273\266", Q_NULLPTR));

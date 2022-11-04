@@ -80,10 +80,10 @@
    <widget class="QGroupBox" name="groupBoxComSet">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>0</x>
       <y>0</y>
-      <width>161</width>
-      <height>51</height>
+      <width>171</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="title">
@@ -92,24 +92,39 @@
     <widget class="QPushButton" name="pushButtonOpen">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>20</y>
-       <width>71</width>
-       <height>23</height>
+       <x>90</x>
+       <y>50</y>
+       <width>69</width>
+       <height>22</height>
       </rect>
      </property>
      <property name="text">
       <string>打开串口</string>
      </property>
     </widget>
+    <widget class="QComboBox" name="comboBoxComBaud">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>69</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>115200</string>
+      </property>
+     </item>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBoxSendSet">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>190</y>
+      <y>170</y>
       <width>161</width>
-      <height>111</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="title">
@@ -118,9 +133,9 @@
     <widget class="QPushButton" name="pushButtonClearSend">
      <property name="geometry">
       <rect>
-       <x>60</x>
+       <x>84</x>
        <y>50</y>
-       <width>95</width>
+       <width>71</width>
        <height>23</height>
       </rect>
      </property>
@@ -131,9 +146,9 @@
     <widget class="QPushButton" name="pushButtonRdFile">
      <property name="geometry">
       <rect>
-       <x>60</x>
+       <x>84</x>
        <y>30</y>
-       <width>95</width>
+       <width>71</width>
        <height>23</height>
       </rect>
      </property>
@@ -144,8 +159,8 @@
     <widget class="QCheckBox" name="checkBoxSendHex">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>80</y>
+       <x>10</x>
+       <y>40</y>
        <width>101</width>
        <height>16</height>
       </rect>
@@ -159,9 +174,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
+      <y>80</y>
       <width>161</width>
-      <height>131</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="title">
@@ -170,8 +185,8 @@
     <widget class="QCheckBox" name="checkBoxRevHex">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>110</y>
+       <x>10</x>
+       <y>60</y>
        <width>101</width>
        <height>16</height>
       </rect>
@@ -192,8 +207,8 @@
     <widget class="QCheckBox" name="checkBoxReVTime">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>90</y>
+       <x>10</x>
+       <y>30</y>
        <width>95</width>
        <height>16</height>
       </rect>
@@ -205,9 +220,9 @@
     <widget class="QPushButton" name="pushButtonClearRev">
      <property name="geometry">
       <rect>
-       <x>60</x>
+       <x>84</x>
        <y>60</y>
-       <width>95</width>
+       <width>71</width>
        <height>23</height>
       </rect>
      </property>
@@ -218,9 +233,9 @@
     <widget class="QPushButton" name="pushButtonStopRev">
      <property name="geometry">
       <rect>
-       <x>60</x>
+       <x>84</x>
        <y>40</y>
-       <width>95</width>
+       <width>71</width>
        <height>23</height>
       </rect>
      </property>
@@ -231,9 +246,9 @@
     <widget class="QPushButton" name="pushButtonSaveRev">
      <property name="geometry">
       <rect>
-       <x>60</x>
+       <x>84</x>
        <y>20</y>
-       <width>95</width>
+       <width>71</width>
        <height>23</height>
       </rect>
      </property>
@@ -329,9 +344,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>310</y>
+      <y>270</y>
       <width>161</width>
-      <height>221</height>
+      <height>261</height>
      </rect>
     </property>
     <property name="title">
