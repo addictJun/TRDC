@@ -28,11 +28,7 @@ private:
 private slots:
 	void Recv(const TRData::Ptr data);
 
-signals:
-	void SendSerial(); //发送数据
-	void SendUI(); //发送数据
-
-//信号处理函数
+//UI界面的命令处理
 public:
 	void ScanSerial();  //扫描串口
 	void OpenSerial(const TRData::Ptr data); //打开串口
@@ -41,7 +37,8 @@ public:
 	void StartRev(const TRData::Ptr data);  //开始显示
 	void SendData(const TRData::Ptr data); //发送数据
 
-
+//串口阶段的命令处理
+public:
 
 
 

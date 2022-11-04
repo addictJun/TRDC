@@ -17,13 +17,13 @@ Core::Core(QObject* parent) : QObject(parent) {
 }
 
 void Core::SignalSlotInit() {
-	//与上层的连接
+	//与UI的接口
 	connect(w, SIGNAL(signal(const TRData::Ptr)),\
 		this, SLOT(Recv(const TRData::Ptr)));
 
-	//与下层的连接
-	//connect(this, SIGNAL(Send), \
-	//	this, SLOT());
+	//与串口的连接
+	connect(my_port, SIGNAL(signal(const TRData::Ptr)), \
+		this, SLOT(Recv(const TRData::Ptr)));
 }
 
 Core::~Core() {
