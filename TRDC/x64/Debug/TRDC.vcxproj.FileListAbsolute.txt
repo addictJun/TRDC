@@ -1,1 +1,2 @@
 D:\git_repository\TRDC\TRDC_v0\TRDC\x64\Debug\TRDC.exe
+D:\software\Git\TRDC\TRDC\x64\Debug\TRDC.exe

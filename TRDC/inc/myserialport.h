@@ -8,7 +8,8 @@
 #include <QtSerialPort/QSerialPort>
 #include <QMessageBox>
 #include <QDebug>
-
+#include "global.h"
+#include "trdata.h"
 
 
 class mySerialPort : public QObject
@@ -23,6 +24,7 @@ public:
     void mySetCom(QString qstr);
     QStringList myScanCom();
     QTimer *recvDelayTimer;
+    void myCloseCom();
     void mySignalEmit();
     void mySetDataType(bool hex_type);
 
@@ -38,10 +40,16 @@ private:
     bool hexData;
     //收/发流量统计
     long ComSendNum,ComRecvNum;
+    //接收数据保存
+    QString strTemp, strTemp1;
 private slots:
     void portDataReady();
-    QString myComRecv();
+    void myComRecv();
     void errorHandle(QSerialPort::SerialPortError);
+
+signals:
+    void signal(const TRData::Ptr data);
+    
 };
 
 

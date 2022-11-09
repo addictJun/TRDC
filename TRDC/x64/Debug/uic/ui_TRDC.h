@@ -20,7 +20,6 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
-
 QT_BEGIN_NAMESPACE
 
 class Ui_TRDCClass

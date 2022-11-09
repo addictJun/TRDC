@@ -3,15 +3,17 @@
 
 mySerialPort::mySerialPort(QObject *parent) : QObject(parent)
 {
-//调试代码
+/* /调试代码
      //QString strsend = "sh /home/root/new_ISR/tesh.sh &";
      QString strsend = "ls";
      mySetBaud("115200");
-     mySerialPort::mySetCom("COM1");
+     mySerialPort::mySetCom("COM6");
      myOpenCom();
      mySetDataType(false);
      myComSend(strsend);
-//调试结束
+/*/
+    //调试结束
+    mySetDataType(false);
     recvDelayTimer = new QTimer;   //新建定时器，定时时间到，则触发接收延时函数，延时函数触发timeout信号，
                                    //进行数据接收
     //recvDelayTimer->start(2000);
@@ -71,7 +73,9 @@ void mySerialPort::mySetBaud(QString qstr){
  * 获取当前串口号并保存
  * ****************************************/
 void mySerialPort::mySetCom(QString qstr){
-    PortNum = qstr;
+    QString spTxt = qstr;
+    spTxt = spTxt.section(':', 0, 0);//过滤掉:后面的信息，只留下COMx
+    PortNum = spTxt;
 }
 
 /******************************************
@@ -119,11 +123,10 @@ void mySerialPort::myOpenCom(){
  * 3.更新接收流量统计
  * 4.返回收到的字符串
  * ****************************************/
-QString mySerialPort::myComRecv(){
+void mySerialPort::myComRecv(){
+    TRData::Ptr p_data(new TRData(R_SEND_DATA));
     recvDelayTimer->stop();
     QByteArray MyComRevBuf;
-    QString strTemp,strTemp1;
-
     //读取串口数据，并格式化
     MyComRevBuf = MyCom.readAll();
 
@@ -134,17 +137,18 @@ QString mySerialPort::myComRecv(){
     //十六进制显示
     if(hexData){
         strTemp = MyComRevBuf.toHex().toUpper();
+        //大写处理
         for(int i =0; i < strTemp.length(); i+=2){
             strTemp1 += strTemp.mid(i,2);
             strTemp1 += " ";
         }
-        //qDebug() <<  strTemp1;
-        return strTemp1;
+        p_data->SetArgument(SEND_DATA, strTemp1);
+        emit signal(p_data);
     }
     //正常显示
     else {
-        //qDebug() << strTemp;
-        return strTemp;
+        p_data->SetArgument(SEND_DATA, strTemp);
+        emit signal(p_data);
     }
 }
 
@@ -198,7 +202,7 @@ QStringList mySerialPort::myScanCom(){
  * ****************************************/
 void mySerialPort::portDataReady(){
     recvDelayTimer->stop();
-    recvDelayTimer->start(1);
+    recvDelayTimer->start(5);
 }
 
 /******************************************
@@ -209,6 +213,9 @@ void mySerialPort::errorHandle(QSerialPort::SerialPortError){
     std::cout << MyCom.error();
 }
 
+void mySerialPort::myCloseCom() {
+    MyCom.close();
+}
 
 /******************************************
  * 析构函数函数
@@ -217,7 +224,7 @@ void mySerialPort::errorHandle(QSerialPort::SerialPortError){
 
 mySerialPort::~mySerialPort()
 {
-    MyCom.close();
+    
 }
 
 

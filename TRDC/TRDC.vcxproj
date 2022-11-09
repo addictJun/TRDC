@@ -53,7 +53,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>D:\git_repository\TRDC\TRDC_v0\TRDC\src;D:\git_repository\TRDC\TRDC_v0\TRDC\inc;$(IncludePath)</IncludePath>
+    <IncludePath>D:\software\Git\TRDC\TRDC\inc;D:\software\Git\TRDC\TRDC\x64;D:\software\Git\TRDC\TRDC;D:\software\Git\TRDC\TRDC\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
@@ -102,6 +102,9 @@
     <ClInclude Include="inc\global.h" />
     <ClInclude Include="inc\trdata.h" />
     <ClInclude Include="x64\Debug\uic\ui_mainwindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

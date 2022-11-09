@@ -3,6 +3,8 @@
 #define GLOBEL_H
 
 // (0xffff ffff）设定为“用户命令
+//由R和X开头的是name，其他为键值
+
 
 //扫描串口
 #define S_SCAN_SERIAL            "scan_serial"
@@ -25,6 +27,7 @@
 #define SEND_DATA                "send_data"
 #define WEEK_FLAG                "week_flag"
 #define HEX_FLAG                 "hex_flag"
+#define R_SEND_DATA				 "r_send_data"
 
 /// 接收数据
 #define S_RECV_DATA              "recv_data"

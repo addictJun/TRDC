@@ -12,8 +12,8 @@ TRDC::TRDC(QWidget *parent)
     ui.setupUi(this);
 
     //2.初始化
-    this->Init();  //页面初始化
-    this->SignalSlotInit();  //信号槽机制初始化
+    this->Init();               //页面初始化
+    this->SignalSlotInit();     //信号槽机制初始化
     
 }
 TRDC::~TRDC()
@@ -26,10 +26,10 @@ void TRDC::SignalSlotInit() {
         this, SLOT(ScanActivePort(TRData::Ptr)));
 }
 void TRDC::Init() {
-    this->RefreshDPI();  //根据dpi调整窗口大小
-    this->TimeInit();  //周期发送
-    this->AddStatusBar();  //下标状态栏
-    this->AddScanPort(); //添加串口按钮
+    this->RefreshDPI();              //根据dpi调整窗口大小
+    this->TimeInit();                //周期发送
+    this->AddStatusBar();            //下标状态栏
+    this->AddScanPort();             //添加串口按钮
     this->ButtonState(false);   // 隐藏发送按钮和接收
     this->ShowTime();  //延迟显示时间
 }
@@ -85,7 +85,6 @@ void TRDC::ButtonState(const bool &flag)
     ui.lineEditTime->setEnabled(flag);
 }
 void TRDC::ShowTime() {
-
     QTimer* DateTimer = new QTimer(this);//状态栏显示时间，日期
     connect(DateTimer, &QTimer::timeout, this, [=]() {sTimeUpdate(); });
     DateTimer->start(1000); //每隔1000ms发送timeout的信号
@@ -146,7 +145,7 @@ void TRDC::SetStartRev() {
     ui.pushButtonStopRev->setText("继续显示");
 }
 
-//信号发送
+//信号发送 
 void TRDC::OpenSerial() {
     //发射信号
     TRData::Ptr p_data(new TRData(S_OPEN_SERIAL));

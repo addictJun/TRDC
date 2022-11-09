@@ -1,7 +1,7 @@
 #include"TRData.h"
 
 TRData::TRData(const QString& name):
-	name(name),arguments(QVariantMap()) {}
+	name(name), arguments(QVariantMap()) {}
 
 TRData::~TRData() {}
 

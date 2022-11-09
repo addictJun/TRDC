@@ -1,4 +1,5 @@
-﻿#include"core.h"
+﻿#include "../inc/core.h"
+#include <iostream>
 
 
 Core::Core(QObject* parent) : QObject(parent) {
@@ -37,7 +38,7 @@ void Core::Recv(const TRData::Ptr data) {
 	TR_CMD_CONNECT_EXEC(S_OPEN_SERIAL, OpenSerial(data));
 	TR_CMD_CONNECT_EXEC(S_CLOSE_SERIAL, CloseSerial(data->GetName()));
 	TR_CMD_CONNECT_EXEC(S_STOP_REV, StopRev(data));
-	TR_CMD_CONNECT_EXEC(S_START_REV, StartRev(data));
+	TR_CMD_CONNECT_EXEC(R_SEND_DATA, StartRev(data));
 	TR_CMD_CONNECT_EXEC(S_SEND_DATA, SendData(data));
 }
 
@@ -50,18 +51,17 @@ void Core::OpenSerial(const TRData::Ptr data) {
 	//解析数据
 	QString baud = data->GetArgument(BAUD).value<QString>();
 	QString com = data->GetArgument(COM).value<QString>();
-	
 	//执行接口
-	qDebug() << baud;
-	qDebug() << com;
-
+	my_port->mySetCom(com);
+	my_port->mySetBaud(baud);
+	my_port->myOpenCom();
 	//返回
 	w->SetCloseSerial();
 }
 
 void Core::CloseSerial(const QString &name) {
 	//执行接口
-
+	my_port->myCloseCom();
 
 	//返回
 	w->SetOpenSerial();
@@ -72,8 +72,12 @@ void Core::StopRev(const TRData::Ptr) {
 	//返回
 	w->SetStartRev();
 }
-void Core::StartRev(const TRData::Ptr) {
+void Core::StartRev(const TRData::Ptr data) {
+	//串口接收数据
+	QString temp_data = data->GetArgument(SEND_DATA).value<QString>();
 
+	//执行接口
+	std::cout << temp_data.toStdString();
 	//返回
 	w->SetStopRev();
 }
@@ -84,9 +88,9 @@ void Core::SendData(const TRData::Ptr data) {
 	bool week = data->GetArgument(WEEK_FLAG).value<bool>();
 
 	//执行接口
-	qDebug() << temp_data;
-	qDebug() << hex;
-	qDebug() << week;
-
+	//qDebug() << temp_data << hex << week;
+	my_port->mySetDataType(hex);
+	if (!(my_port->myComSend(temp_data)))
+		qDebug() << "send error";
 	//返回
 }
